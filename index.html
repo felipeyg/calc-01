@@ -75,12 +75,50 @@
             <section id="result" class="result-section" style="display: none;">
                 <h2>Resultado da Simulação</h2>
                 <div class="result-card">
-                    <h3>Montante Final do Investimento</h3>
-                    <div class="result-value">R$ 0,00</div>
-                    <div class="result-details">
-                        <p>Total investido: <span id="total-invested">R$ 0,00</span></p>
-                        <p>Total em juros: <span id="total-interest">R$ 0,00</span></p>
+                    <div class="summary">
+                        <div class="summary-item">
+                            <h4>Montante Final</h4>
+                            <div id="total-amount" class="summary-value">R$ 0,00</div>
+                        </div>
+                        <div class="summary-item">
+                            <h4>Total Investido</h4>
+                            <div id="total-invested" class="summary-value">R$ 0,00</div>
+                        </div>
+                        <div class="summary-item">
+                            <h4>Total em Juros</h4>
+                            <div id="total-interest" class="summary-value">R$ 0,00</div>
+                        </div>
+                        <div class="summary-item">
+                            <h4>Rentabilidade</h4>
+                            <div id="profitability" class="summary-value">0%</div>
+                        </div>
                     </div>
+                </div>
+            </section>
+            
+            <section id="detailed-results" class="detailed-section" style="display: none;">
+                <h2>Evolução Mês a Mês</h2>
+                
+                <div class="actions">
+                    <button id="export-data" class="btn btn-export">Exportar para CSV</button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="monthly-table">
+                        <thead>
+                            <tr>
+                                <th>Mês</th>
+                                <th>Aporte</th>
+                                <th>Juros no Mês</th>
+                                <th>Total Investido</th>
+                                <th>Total em Juros</th>
+                                <th>Montante</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dados mensais serão preenchidos aqui -->
+                        </tbody>
+                    </table>
                 </div>
             </section>
         </main>

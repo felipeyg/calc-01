@@ -3,6 +3,7 @@
 class InvestmentCalculator {
     constructor() {
         this.periods = [];
+        this.monthlyData = [];
     }
     
     addPeriod(monthlyInvestment, interestRate, duration) {
@@ -23,34 +24,59 @@ class InvestmentCalculator {
     
     clearPeriods() {
         this.periods = [];
+        this.monthlyData = [];
     }
     
     calculate() {
+        this.monthlyData = [];
         let totalAmount = 0;
         let totalInvested = 0;
+        let currentMonth = 0;
         
+        // Calcular para cada período
         for (let i = 0; i < this.periods.length; i++) {
             const period = this.periods[i];
-            const periodAmount = calculatePeriodAmount(
-                period.monthlyInvestment,
-                period.interestRate,
-                period.duration
-            );
+            const monthlyRate = period.interestRate / 100;
             
-            totalAmount += periodAmount;
-            totalInvested += period.monthlyInvestment * period.duration;
+            for (let month = 1; month <= period.duration; month++) {
+                currentMonth++;
+                
+                // Calcular juros do mês
+                const monthlyInterest = totalAmount * monthlyRate;
+                
+                // Adicionar aporte do mês
+                totalAmount += period.monthlyInvestment + monthlyInterest;
+                totalInvested += period.monthlyInvestment;
+                
+                // Adicionar dados para a tabela mensal
+                this.monthlyData.push({
+                    month: currentMonth,
+                    monthlyInvestment: period.monthlyInvestment,
+                    monthlyInterest: monthlyInterest,
+                    totalInvested: totalInvested,
+                    totalInterest: totalAmount - totalInvested,
+                    accumulatedAmount: totalAmount
+                });
+            }
         }
         
         const totalInterest = totalAmount - totalInvested;
+        const profitability = totalInvested > 0 ? (totalInterest / totalInvested * 100) : 0;
         
         return {
             totalAmount,
             totalInvested,
-            totalInterest
+            totalInterest,
+            profitability,
+            monthlyData: this.monthlyData
         };
     }
     
     getPeriods() {
         return this.periods;
+    }
+    
+    getMonthlyData() {
+        return this.monthlyData;
     }
 }

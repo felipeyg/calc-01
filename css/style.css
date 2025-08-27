@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     background: white;
     padding: 30px;
@@ -125,13 +125,19 @@ table {
 
 th, td {
     padding: 12px 15px;
-    text-align: left;
+    text-align: right;
     border-bottom: 1px solid #ddd;
 }
 
 th {
     background-color: #f2f2f2;
     font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+th:first-child, td:first-child {
+    text-align: left;
 }
 
 tr:hover {
@@ -178,6 +184,15 @@ tr:hover {
     background-color: #7f8c8d;
 }
 
+.btn-export {
+    background-color: #f39c12;
+    color: white;
+}
+
+.btn-export:hover {
+    background-color: #d35400;
+}
+
 .result-section {
     margin-top: 30px;
 }
@@ -186,31 +201,42 @@ tr:hover {
     background-color: #e8f6f3;
     padding: 25px;
     border-radius: 8px;
-    text-align: center;
     border-left: 4px solid #2ecc71;
 }
 
-.result-card h3 {
-    color: #2ecc71;
-    margin-bottom: 15px;
-}
-
-.result-value {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #27ae60;
-    margin-bottom: 20px;
-}
-
-.result-details {
+.summary {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
     gap: 15px;
 }
 
-.result-details p {
-    font-weight: 600;
+.summary-item {
+    background-color: white;
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+    min-width: 200px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.summary-item h4 {
+    color: #7f8c8d;
+    margin-bottom: 8px;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.detailed-section {
+    margin-top: 30px;
+}
+
+.highlight {
+    background-color: #fff8e1;
 }
 
 footer {
