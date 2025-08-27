@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Investimentos com Aportes Variáveis</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Calculadora de Investimentos com Aportes Variáveis</h1>
+            <p class="subtitle">Simule seus investimentos com múltiplos períodos e valores variáveis</p>
+        </header>
+        
+        <main>
+            <section class="instructions">
+                <h2>Como usar</h2>
+                <ol>
+                    <li>Adicione um ou mais períodos de investimento</li>
+                    <li>Defina o valor do aporte mensal para cada período</li>
+                    <li>Informe a taxa de juros mensal esperada</li>
+                    <li>Especifique a duração de cada período em meses</li>
+                    <li>Clique em "Calcular" para ver o resultado</li>
+                </ol>
+            </section>
+            
+            <section class="input-section">
+                <h2>Adicionar Período</h2>
+                <div class="input-group">
+                    <div class="input-field">
+                        <label for="monthly-investment">Aporte Mensal (R$)</label>
+                        <input type="number" id="monthly-investment" min="0" step="0.01" placeholder="Ex: 500.00">
+                    </div>
+                    
+                    <div class="input-field">
+                        <label for="interest-rate">Taxa de Juros Mensal (%)</label>
+                        <input type="number" id="interest-rate" min="0" step="0.01" placeholder="Ex: 0.8">
+                    </div>
+                    
+                    <div class="input-field">
+                        <label for="duration">Duração (meses)</label>
+                        <input type="number" id="duration" min="1" placeholder="Ex: 12">
+                    </div>
+                </div>
+                
+                <button id="add-period" class="btn btn-add">Adicionar Período</button>
+            </section>
+            
+            <section class="periods-section">
+                <h2>Períodos de Investimento</h2>
+                <div class="table-container">
+                    <table id="periods-table">
+                        <thead>
+                            <tr>
+                                <th>Aporte Mensal (R$)</th>
+                                <th>Taxa de Juros (%)</th>
+                                <th>Duração (meses)</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Períodos serão adicionados aqui -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="actions">
+                    <button id="calculate" class="btn btn-calculate">Calcular Montante Final</button>
+                    <button id="reset" class="btn btn-reset">Limpar Tudo</button>
+                </div>
+            </section>
+            
+            <section id="result" class="result-section" style="display: none;">
+                <h2>Resultado da Simulação</h2>
+                <div class="result-card">
+                    <h3>Montante Final do Investimento</h3>
+                    <div class="result-value">R$ 0,00</div>
+                    <div class="result-details">
+                        <p>Total investido: <span id="total-invested">R$ 0,00</span></p>
+                        <p>Total em juros: <span id="total-interest">R$ 0,00</span></p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Trabalho de Conclusão de Curso - Calculadora de Investimentos com Aportes Variáveis</p>
+        </footer>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

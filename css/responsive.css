@@ -1,0 +1,60 @@
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .input-field {
+        min-width: 100%;
+    }
+    
+    .input-group {
+        gap: 15px;
+    }
+    
+    .actions {
+        flex-direction: column;
+    }
+    
+    .result-value {
+        font-size: 2rem;
+    }
+    
+    .result-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    .instructions {
+        padding: 15px;
+    }
+    
+    th, td {
+        padding: 8px 10px;
+    }
+    
+    .result-value {
+        font-size: 1.8rem;
+    }
+    
+    .result-card {
+        padding: 15px;
+    }
+}
