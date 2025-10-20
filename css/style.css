@@ -184,15 +184,6 @@ tr:hover {
     background-color: #7f8c8d;
 }
 
-.btn-export {
-    background-color: #f39c12;
-    color: white;
-}
-
-.btn-export:hover {
-    background-color: #d35400;
-}
-
 .result-section {
     margin-top: 30px;
 }

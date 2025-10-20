@@ -1,5 +1,3 @@
-// Lógica de cálculo dos investimentos
-
 class InvestmentCalculator {
     constructor() {
         this.periods = [];
@@ -33,7 +31,6 @@ class InvestmentCalculator {
         let totalInvested = 0;
         let currentMonth = 0;
         
-        // Calcular para cada período
         for (let i = 0; i < this.periods.length; i++) {
             const period = this.periods[i];
             const monthlyRate = period.interestRate / 100;
@@ -41,14 +38,11 @@ class InvestmentCalculator {
             for (let month = 1; month <= period.duration; month++) {
                 currentMonth++;
                 
-                // Calcular juros do mês
                 const monthlyInterest = totalAmount * monthlyRate;
                 
-                // Adicionar aporte do mês
                 totalAmount += period.monthlyInvestment + monthlyInterest;
                 totalInvested += period.monthlyInvestment;
                 
-                // Adicionar dados para a tabela mensal
                 this.monthlyData.push({
                     month: currentMonth,
                     monthlyInvestment: period.monthlyInvestment,

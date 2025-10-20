@@ -1,6 +1,3 @@
-// Funções utilitárias
-
-// Formata valores monetários
 function formatCurrency(value) {
     return new Intl.NumberFormat('pt-BR', {
         style: 'currency',
@@ -8,17 +5,14 @@ function formatCurrency(value) {
     }).format(value);
 }
 
-// Valida se um valor é numérico e positivo
 function isValidNumber(value) {
     return !isNaN(value) && value > 0;
 }
 
-// Exibe mensagens de erro para o usuário
 function showError(message) {
     alert(`Erro: ${message}`);
 }
 
-// Calcula o montante para um único período
 function calculatePeriodAmount(monthlyInvestment, interestRate, duration) {
     const monthlyRate = interestRate / 100;
     
