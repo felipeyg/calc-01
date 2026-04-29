@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const interestRate = parseFloat(document.getElementById('interest-rate').value);
         const duration = parseInt(document.getElementById('duration').value);
         
-        if (!isValidNumber(monthlyInvestment) || !isValidNumber(interestRate) || !isValidNumber(duration)) {
-            showError('Por favor, preencha todos os campos com valores válidos.');
-            return;
+        if (!isValidNonNegativeNumber(monthlyInvestment) || !isValidNonNegativeNumber(interestRate) || !isValidPositiveNumber(duration)) {
+        showError('Aporte e taxa devem ser maiores ou iguais a zero. A duração deve ser maior que zero.');
+        return;
         }
         
         calculator.addPeriod(monthlyInvestment, interestRate, duration);

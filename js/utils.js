@@ -5,7 +5,11 @@ function formatCurrency(value) {
     }).format(value);
 }
 
-function isValidNumber(value) {
+function isValidNonNegativeNumber(value) {
+    return !isNaN(value) && value >= 0;
+}
+
+function isValidPositiveNumber(value) {
     return !isNaN(value) && value > 0;
 }
 
