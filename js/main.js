@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const profitabilityElement = document.getElementById('profitability');
     
     addPeriodBtn.addEventListener('click', function() {
-        const monthlyInvestment = parseFloat(document.getElementById('monthly-investment').value);
-        const interestRate = parseFloat(document.getElementById('interest-rate').value);
+        const monthlyInvestment = parseBrazilianNumber(document.getElementById('monthly-investment').value);
+        const interestRate = parseBrazilianNumber(document.getElementById('interest-rate').value);
         const duration = parseInt(document.getElementById('duration').value);
         
         if (!isValidNonNegativeNumber(monthlyInvestment) || !isValidNonNegativeNumber(interestRate) || !isValidPositiveNumber(duration)) {

@@ -26,3 +26,13 @@ function calculatePeriodAmount(monthlyInvestment, interestRate, duration) {
     
     return monthlyInvestment * (Math.pow(1 + monthlyRate, duration) - 1) / monthlyRate;
 }
+
+function parseBrazilianNumber(value) {
+    const normalizedValue = String(value).trim();
+
+    if (normalizedValue.includes(',') && normalizedValue.includes('.')) {
+        return parseFloat(normalizedValue.replace(/\./g, '').replace(',', '.'));
+    }
+
+    return parseFloat(normalizedValue.replace(',', '.'));
+}
