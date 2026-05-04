@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Investimentos com Aportes Variáveis</title>
+    <title>Ferramenta Web para Simulação de Investimentos em Períodos Sucessivos</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Calculadora de Investimentos com Aportes Variáveis</h1>
-            <p class="subtitle">Simule seus investimentos com múltiplos períodos e valores variáveis</p>
+            <h1>Ferramenta Web para Simulação de Investimentos em Períodos Sucessivos</h1>
+            <p class="subtitle">Simulação de cenários com aportes, taxas e durações variáveis entre períodos</p>
         </header>
         
         <main>
@@ -41,7 +41,7 @@
                     
                     <div class="input-field">
                         <label for="duration">Duração (meses)</label>
-                        <input type="number" id="duration" min="1" placeholder="Ex: 12">
+                        <input type="number" id="duration" min="1" step="1" placeholder="Ex: 12">
                     </div>
                 </div>
                 
@@ -89,7 +89,7 @@
                             <div id="total-interest" class="summary-value">R$ 0,00</div>
                         </div>
                         <div class="summary-item">
-                            <h4>Rentabilidade</h4>
+                            <h4>Ganho sobre o Total Investido</h4>
                             <div id="profitability" class="summary-value">0%</div>
                         </div>
                     </div>

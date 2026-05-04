@@ -16,10 +16,11 @@ document.addEventListener('DOMContentLoaded', function() {
     addPeriodBtn.addEventListener('click', function() {
         const monthlyInvestment = parseBrazilianNumber(document.getElementById('monthly-investment').value);
         const interestRate = parseBrazilianNumber(document.getElementById('interest-rate').value);
-        const duration = parseInt(document.getElementById('duration').value);
+        const durationValue = document.getElementById('duration').value;
+        const duration = Number(durationValue);
         
-        if (!isValidNonNegativeNumber(monthlyInvestment) || !isValidNonNegativeNumber(interestRate) || !isValidPositiveNumber(duration)) {
-        showError('Aporte e taxa devem ser maiores ou iguais a zero. A duração deve ser maior que zero.');
+        if (!isValidNonNegativeNumber(monthlyInvestment) || !isValidNonNegativeNumber(interestRate) || !isValidPositiveNumber(duration) || duration <= 0 ){
+        showError('Aporte e taxa devem ser maiores ou iguais a zero. A duração deve ser um número inteiro maior que zero.');
         return;
         }
         
