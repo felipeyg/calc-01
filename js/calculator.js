@@ -36,7 +36,18 @@ class InvestmentCalculator {
         let totalAmount = this.initialCapital;
         let totalInvested = this.initialCapital;
         let currentMonth = 0;
-        
+
+        if (this.initialCapital > 0) {
+            this.monthlyData.push({
+            month: 0,
+            monthlyInvestment: 0,
+            monthlyInterest: 0,
+            totalInvested: totalInvested,
+            totalInterest: 0,
+            accumulatedAmount: totalAmount
+            });
+        }
+    
         for (let i = 0; i < this.periods.length; i++) {
             const period = this.periods[i];
             const monthlyRate = period.interestRate / 100;

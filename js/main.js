@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
     const calculator = new InvestmentCalculator();
-    
     const initialCapitalInput = document.getElementById('initial-capital');
     const addPeriodBtn = document.getElementById('add-period');
     const calculateBtn = document.getElementById('calculate');
@@ -14,6 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalInvestedElement = document.getElementById('total-invested');
     const totalInterestElement = document.getElementById('total-interest');
     const profitabilityElement = document.getElementById('profitability');
+    const comparisonSection = document.getElementById('comparison-section');
+    const saveScenarioBtn = document.getElementById('save-scenario');
+    const clearScenariosBtn = document.getElementById('clear-scenarios');
+    const comparisonTable = document.getElementById('comparison-table').getElementsByTagName('tbody')[0];
+
+    const savedScenarios = [];
+    let lastResult = null;
     
     addPeriodBtn.addEventListener('click', function() {
         const monthlyInvestment = parseBrazilianNumber(document.getElementById('monthly-investment').value);
@@ -69,6 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         calculator.setInitialCapital(initialCapital);
         const result = calculator.calculate();
+
+        lastResult = result;
+        comparisonSection.style.display = 'block';
         
         initialCapitalResultElement.textContent = formatCurrency(result.initialCapital);
         totalAmountElement.textContent = formatCurrency(result.totalAmount);
@@ -82,10 +91,10 @@ document.addEventListener('DOMContentLoaded', function() {
         monthlyTable.innerHTML = '';
         result.monthlyData.forEach(data => {
             const row = monthlyTable.insertRow();
-            if (data.month % 12 === 0) {
+            if (data.month > 0 && data.month % 12 === 0) {
                 row.classList.add('highlight');
             }
-            
+
             row.innerHTML = `
                 <td>${data.month}</td>
                 <td>${formatCurrency(data.monthlyInvestment)}</td>
@@ -99,6 +108,70 @@ document.addEventListener('DOMContentLoaded', function() {
         resultSection.scrollIntoView({ behavior: 'smooth' });
     });
     
+    function updateComparisonTable() {
+        comparisonTable.innerHTML = '';
+
+        if (savedScenarios.length === 0) {
+            comparisonSection.style.display = 'none';
+            return;
+        }
+
+        comparisonSection.style.display = 'block';
+
+        const baseScenario = savedScenarios[0];
+
+        savedScenarios.forEach(scenario => {
+            const differenceFromBase = scenario.totalAmount - baseScenario.totalAmount;
+
+            const row = comparisonTable.insertRow();
+
+            row.innerHTML = `
+                <td>${scenario.name}</td>
+                <td>${formatCurrency(scenario.initialCapital)}</td>
+                <td>${scenario.totalMonths} meses</td>
+                <td>${formatCurrency(scenario.totalInvested)}</td>
+                <td>${formatCurrency(scenario.totalInterest)}</td>
+                <td>${formatCurrency(scenario.totalAmount)}</td>
+                <td>${scenario.profitability.toFixed(2)}%</td>
+                <td>${formatCurrency(differenceFromBase)}</td>
+            `;
+        });
+    }
+
+    saveScenarioBtn.addEventListener('click', function() {
+        if (!lastResult) {
+            showError('Execute uma simulação antes de salvar um cenário.');
+            return;
+        }
+
+        const scenarioName = prompt('Informe um nome para o cenário:');
+
+        if (!scenarioName || scenarioName.trim() === '') {
+            showError('Informe um nome válido para o cenário.');
+            return;
+        }
+
+        const totalMonths = lastResult.monthlyData.filter(data => data.month > 0).length;
+
+        savedScenarios.push({
+            name: scenarioName.trim(),
+            initialCapital: lastResult.initialCapital,
+            totalMonths: totalMonths,
+            totalInvested: lastResult.totalInvested,
+            totalInterest: lastResult.totalInterest,
+            totalAmount: lastResult.totalAmount,
+            profitability: lastResult.profitability
+        });
+
+        updateComparisonTable();
+    });
+
+    clearScenariosBtn.addEventListener('click', function() {
+        savedScenarios.length = 0;
+        comparisonTable.innerHTML = '';
+        comparisonSection.style.display = 'none';
+    });
+
     resetBtn.addEventListener('click', function() {
         calculator.clearPeriods();
         periodsTable.innerHTML = '';
@@ -106,6 +179,11 @@ document.addEventListener('DOMContentLoaded', function() {
         resultSection.style.display = 'none';
         detailedResultsDiv.style.display = 'none';
         
+        savedScenarios.length = 0;
+        comparisonTable.innerHTML = '';
+        comparisonSection.style.display = 'none';
+        lastResult = null;
+
         initialCapitalInput.value = '';
         document.getElementById('monthly-investment').value = '';
         document.getElementById('interest-rate').value = '';
