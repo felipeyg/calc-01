@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ferramenta Web para Simulação de Investimentos em Períodos Sucessivos</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/responsive.css"> 
+    <script src="js/utils.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/main.js"></script>
 </head>
 <body>
     <div class="container">
@@ -44,12 +47,12 @@
                 <div class="input-group">
                     <div class="input-field">
                         <label for="monthly-investment">Aporte Mensal (R$)</label>
-                        <input type="number" id="monthly-investment" inputmode="decimal" placeholder="Ex: 500.00">
+                        <input type="text" id="monthly-investment" inputmode="decimal" placeholder="Ex: 500,00">
                     </div>
                     
                     <div class="input-field">
                         <label for="interest-rate">Taxa de Juros Mensal (%)</label>
-                        <input type="number" id="interest-rate" inputmode="decimal" placeholder="Ex: 0.8">
+                        <input type="text" id="interest-rate" inputmode="decimal" placeholder="Ex: 0,8">
                     </div>
                     
                     <div class="input-field">
@@ -141,8 +144,5 @@
         </footer>
     </div>
 
-    <script src="js/utils.js"></script>
-    <script src="js/calculator.js"></script>
-    <script src="js/main.js"></script>
 </body>
 </html>
