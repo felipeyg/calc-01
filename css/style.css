@@ -94,6 +94,13 @@ input:focus {
     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
+.field-hint {
+    display: block;
+    margin-top: 6px;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
 .btn {
     padding: 12px 20px;
     border: none;

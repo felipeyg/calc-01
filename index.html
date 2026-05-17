@@ -18,16 +18,29 @@
             <section class="instructions">
                 <h2>Como usar</h2>
                 <ol>
+                    <li>Informe o capital inicial, caso exista</li>
                     <li>Adicione um ou mais períodos de investimento</li>
                     <li>Defina o valor do aporte mensal para cada período</li>
                     <li>Informe a taxa de juros mensal esperada</li>
                     <li>Especifique a duração de cada período em meses</li>
-                    <li>Clique em "Calcular" para ver o resultado</li>
+                    <li>Clique em "Executar Simulação" para ver o resultado</li>
                 </ol>
             </section>
             
+
             <section class="input-section">
-                <h2>Adicionar Período</h2>
+                <h2>Parâmetros Iniciais da Simulação</h2>
+                <div class="input-group">
+                    <div class="input-field">
+                        <label for="initial-capital">Capital Inicial (R$)</label>
+                        <input type="text" id="initial-capital" inputmode="decimal" placeholder="Ex: 1.000,00">
+                        <small class="field-hint">Opcional. Se não houver capital inicial, deixe em branco ou informe 0.</small>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="input-section">
+                <h2>Cadastro dos Períodos de Simulação</h2>
                 <div class="input-group">
                     <div class="input-field">
                         <label for="monthly-investment">Aporte Mensal (R$)</label>
@@ -67,7 +80,7 @@
                 </div>
                 
                 <div class="actions">
-                    <button id="calculate" class="btn btn-calculate">Calcular Montante Final</button>
+                    <button id="calculate" class="btn btn-calculate">Executar Simulação</button>
                     <button id="reset" class="btn btn-reset">Limpar Tudo</button>
                 </div>
             </section>
@@ -76,6 +89,10 @@
                 <h2>Resultado da Simulação</h2>
                 <div class="result-card">
                     <div class="summary">
+                        <div class="summary-item">
+                            <h4>Capital Inicial</h4>
+                            <div id="initial-capital-result" class="summary-value">R$ 0,00</div>
+                        </div>
                         <div class="summary-item">
                             <h4>Montante Final</h4>
                             <div id="total-amount" class="summary-value">R$ 0,00</div>
@@ -120,7 +137,7 @@
         </main>
         
         <footer>
-            <p>Trabalho de Conclusão de Curso - Calculadora de Investimentos com Aportes Variáveis</p>
+            <p>Trabalho de Conclusão de Curso - Engenharia de Produção | Protótipo de Simulação de Investimentos</p>
         </footer>
     </div>
 

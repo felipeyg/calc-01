@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const calculator = new InvestmentCalculator();
     
+    const initialCapitalInput = document.getElementById('initial-capital');
     const addPeriodBtn = document.getElementById('add-period');
     const calculateBtn = document.getElementById('calculate');
     const resetBtn = document.getElementById('reset');
@@ -8,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultSection = document.getElementById('result');
     const detailedResultsDiv = document.getElementById('detailed-results');
     const monthlyTable = document.getElementById('monthly-table').getElementsByTagName('tbody')[0];
+    const initialCapitalResultElement = document.getElementById('initial-capital-result');
     const totalAmountElement = document.getElementById('total-amount');
     const totalInvestedElement = document.getElementById('total-invested');
     const totalInterestElement = document.getElementById('total-interest');
@@ -19,9 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const durationValue = document.getElementById('duration').value;
         const duration = Number(durationValue);
         
-        if (!isValidNonNegativeNumber(monthlyInvestment) || !isValidNonNegativeNumber(interestRate) || !isValidPositiveNumber(duration) || duration <= 0 ){
-        showError('Aporte e taxa devem ser maiores ou iguais a zero. A duração deve ser um número inteiro maior que zero.');
-        return;
+        if (
+            !isValidNonNegativeNumber(monthlyInvestment) ||
+            !isValidNonNegativeNumber(interestRate) ||
+            !Number.isInteger(duration) ||
+            duration <= 0
+        ) {
+            showError('Aporte e taxa devem ser maiores ou iguais a zero. A duração deve ser um número inteiro maior que zero.');
+            return;
         }
         
         calculator.addPeriod(monthlyInvestment, interestRate, duration);
@@ -47,13 +54,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     calculateBtn.addEventListener('click', function() {
+        const initialCapitalValue = initialCapitalInput.value.trim();
+        const initialCapital = initialCapitalValue === '' ? 0 : parseBrazilianNumber(initialCapitalValue);
+        
+        if (!isValidNonNegativeNumber(initialCapital)) {
+            showError('O capital inicial deve ser maior ou igual a zero.');
+            return;
+        }
+        
         if (calculator.getPeriods().length === 0) {
             showError('Adicione pelo menos um período de investimento.');
             return;
         }
         
+        calculator.setInitialCapital(initialCapital);
         const result = calculator.calculate();
         
+        initialCapitalResultElement.textContent = formatCurrency(result.initialCapital);
         totalAmountElement.textContent = formatCurrency(result.totalAmount);
         totalInvestedElement.textContent = formatCurrency(result.totalInvested);
         totalInterestElement.textContent = formatCurrency(result.totalInterest);
@@ -89,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         resultSection.style.display = 'none';
         detailedResultsDiv.style.display = 'none';
         
+        initialCapitalInput.value = '';
         document.getElementById('monthly-investment').value = '';
         document.getElementById('interest-rate').value = '';
         document.getElementById('duration').value = '';

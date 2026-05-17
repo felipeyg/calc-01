@@ -1,7 +1,12 @@
 class InvestmentCalculator {
     constructor() {
+        this.initialCapital = 0;
         this.periods = [];
         this.monthlyData = [];
+    }
+    
+    setInitialCapital(initialCapital) {
+        this.initialCapital = initialCapital;
     }
     
     addPeriod(monthlyInvestment, interestRate, duration) {
@@ -21,14 +26,15 @@ class InvestmentCalculator {
     }
     
     clearPeriods() {
+        this.initialCapital = 0;
         this.periods = [];
         this.monthlyData = [];
     }
     
     calculate() {
         this.monthlyData = [];
-        let totalAmount = 0;
-        let totalInvested = 0;
+        let totalAmount = this.initialCapital;
+        let totalInvested = this.initialCapital;
         let currentMonth = 0;
         
         for (let i = 0; i < this.periods.length; i++) {
@@ -58,6 +64,7 @@ class InvestmentCalculator {
         const profitability = totalInvested > 0 ? (totalInterest / totalInvested * 100) : 0;
         
         return {
+            initialCapital: this.initialCapital,
             totalAmount,
             totalInvested,
             totalInterest,
