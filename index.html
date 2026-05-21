@@ -51,15 +51,30 @@
                     </div>
                     
                     <div class="input-field">
-                        <label for="interest-rate">Taxa de Juros Mensal (%)</label>
-                        <input type="text" id="interest-rate" inputmode="decimal" placeholder="Ex: 0,8">
-                    </div>
-                    
-                    <div class="input-field">
-                        <label for="duration">Duração (meses)</label>
-                        <input type="number" id="duration" min="1" step="1" placeholder="Ex: 12">
-                    </div>
-                </div>
+    <label for="interest-rate">Taxa de Juros (%)</label>
+    <input type="text" id="interest-rate" inputmode="decimal" placeholder="Ex: 0,8">
+</div>
+
+            <div class="input-field">
+                <label for="interest-rate-period">Taxa de Juros</label>
+                <select id="interest-rate-period">
+                    <option value="monthly" selected>Mensal</option>
+                    <option value="annual">Anual</option>
+                </select>
+            </div>
+
+            <div class="input-field">
+                <label for="duration">Duração</label>
+                <input type="number" id="duration" min="1" step="1" placeholder="Ex: 12">
+            </div>
+
+            <div class="input-field">
+                <label for="duration-period">Duração</label>
+                <select id="duration-period">
+                    <option value="months" selected>Meses</option>
+                    <option value="years">Anos</option>
+                </select>
+            </div>
                 
                 <button id="add-period" class="btn btn-add">Adicionar Período</button>
             </section>
@@ -71,8 +86,8 @@
                         <thead>
                             <tr>
                                 <th>Aporte Mensal (R$)</th>
-                                <th>Taxa de Juros Mensal (%)</th>
-                                <th>Duração (meses)</th>
+                                <th>Taxa de Juros</th>
+                                <th>Duração</th>
                                 <th>Ação</th>
                             </tr>
                         </thead>

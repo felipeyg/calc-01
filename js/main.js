@@ -25,8 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
     addPeriodBtn.addEventListener('click', function() {
         const monthlyInvestment = parseBrazilianNumber(document.getElementById('monthly-investment').value);
         const interestRate = parseBrazilianNumber(document.getElementById('interest-rate').value);
+        const interestRatePeriod = document.getElementById('interest-rate-period').value;
+
         const durationValue = document.getElementById('duration').value;
-        const duration = Number(durationValue);
+        const durationInput = Number(durationValue);
+        const durationPeriod = document.getElementById('duration-period').value;
 
         if (!initialCapitalLocked) {
             const initialCapitalValue = initialCapitalInput.value.trim();
@@ -45,20 +48,38 @@ document.addEventListener('DOMContentLoaded', function() {
         if (
             !isValidNonNegativeNumber(monthlyInvestment) ||
             !isValidNonNegativeNumber(interestRate) ||
-            !Number.isInteger(duration) ||
-            duration <= 0
+            !Number.isInteger(durationInput) ||
+            durationInput <= 0
         ) {
             showError('Aporte e taxa devem ser maiores ou iguais a zero. A duração deve ser um número inteiro maior que zero.');
             return;
         }
+
+        let monthlyInterestRate = interestRate;
+
+        if (interestRatePeriod === 'annual') {
+            monthlyInterestRate = (Math.pow(1 + interestRate / 100, 1 / 12) - 1) * 100;
+        }
+
+        const durationInMonths = durationPeriod === 'years'
+            ? durationInput * 12
+            : durationInput;
+
+        const interestRateLabel = interestRatePeriod === 'annual'
+            ? `${interestRate}% ao ano`
+            : `${interestRate}% ao mês`;
+
+        const durationLabel = durationPeriod === 'years'
+            ? `${durationInput} ano(s) (${durationInMonths} meses)`
+            : `${durationInput} mês(es)`;
         
-        calculator.addPeriod(monthlyInvestment, interestRate, duration);
+        calculator.addPeriod(monthlyInvestment, monthlyInterestRate, durationInMonths);
         
         const row = periodsTable.insertRow();
         row.innerHTML = `
             <td>${formatCurrency(monthlyInvestment)}</td>
-            <td>${interestRate}%</td>
-            <td>${duration}</td>
+            <td>${interestRateLabel}</td>
+            <td>${durationLabel}</td>
             <td><button class="btn-remove">Remover</button></td>
         `;
         
@@ -78,6 +99,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('monthly-investment').value = '';
         document.getElementById('interest-rate').value = '';
         document.getElementById('duration').value = '';
+        document.getElementById('interest-rate-period').value = 'monthly';
+        document.getElementById('duration-period').value = 'months';
     });
     
     calculateBtn.addEventListener('click', function() {
