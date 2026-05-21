@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/responsive.css"> 
     <script src="js/utils.js"></script>
     <script src="js/calculator.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/main.js"></script>
 </head>
 <body>
@@ -159,6 +160,18 @@
                             <!-- Cenários salvos serão adicionados aqui -->
                         </tbody>
                     </table>
+                </div>
+
+                <div id="comparison-chart-container" class="chart-container" style="display: none;">
+                    <h3>Comparação da Evolução dos Cenários</h3>
+                    <canvas id="comparison-chart"></canvas>
+                </div>
+            </section>
+
+            <section id="current-chart-section" class="chart-section" style="display: none;">
+                <h2>Evolução do Montante Acumulado</h2>
+                <div class="chart-container">
+                    <canvas id="current-amount-chart"></canvas>
                 </div>
             </section>
 

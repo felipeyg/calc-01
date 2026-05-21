@@ -17,7 +17,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const saveScenarioBtn = document.getElementById('save-scenario');
     const clearScenariosBtn = document.getElementById('clear-scenarios');
     const comparisonTable = document.getElementById('comparison-table').getElementsByTagName('tbody')[0];
+    const currentChartSection = document.getElementById('current-chart-section');
+    const currentAmountChartCanvas = document.getElementById('current-amount-chart');
+    const comparisonChartContainer = document.getElementById('comparison-chart-container');
+    const comparisonChartCanvas = document.getElementById('comparison-chart');
 
+    let currentAmountChart = null;
+    let comparisonAmountChart = null;
     const savedScenarios = [];
     let lastResult = null;
     let initialCapitalLocked = false;
@@ -103,6 +109,169 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('duration-period').value = 'months';
     });
     
+    function getMonthlyDataWithMonthZero(monthlyData, initialCapital) {
+    const hasMonthZero = monthlyData.some(data => data.month === 0);
+
+    if (hasMonthZero) {
+        return monthlyData;
+    }
+
+    return [
+        {
+            month: 0,
+            accumulatedAmount: initialCapital
+        },
+        ...monthlyData
+    ];
+}
+
+    function renderCurrentAmountChart(result) {
+        const chartData = getMonthlyDataWithMonthZero(result.monthlyData, result.initialCapital);
+
+        const labels = chartData.map(data => data.month);
+        const values = chartData.map(data => Number(data.accumulatedAmount.toFixed(2)));
+
+        if (currentAmountChart) {
+            currentAmountChart.destroy();
+        }
+
+        currentAmountChart = new Chart(currentAmountChartCanvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Montante acumulado',
+                        data: values,
+                        tension: 0.2,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Mês'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Montante acumulado (R$)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return formatCurrency(value);
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        currentChartSection.style.display = 'block';
+    }
+
+    function renderComparisonChart() {
+        if (comparisonAmountChart) {
+            comparisonAmountChart.destroy();
+            comparisonAmountChart = null;
+        }
+
+        if (savedScenarios.length < 2) {
+            comparisonChartContainer.style.display = 'none';
+            return;
+        }
+
+        const maxMonth = Math.max(
+            ...savedScenarios.map(scenario =>
+                Math.max(...scenario.monthlyData.map(data => data.month))
+            )
+        );
+
+        const labels = Array.from({ length: maxMonth + 1 }, (_, index) => index);
+
+        const datasets = savedScenarios.map(scenario => {
+            const valuesByMonth = new Map(
+                scenario.monthlyData.map(data => [data.month, data.accumulatedAmount])
+            );
+
+            return {
+                label: scenario.name,
+                data: labels.map(month => {
+                    return valuesByMonth.has(month)
+                        ? Number(valuesByMonth.get(month).toFixed(2))
+                        : null;
+                }),
+                tension: 0.2,
+                fill: false
+            };
+        });
+
+        comparisonAmountChart = new Chart(comparisonChartCanvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Mês'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Montante acumulado (R$)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return formatCurrency(value);
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        comparisonChartContainer.style.display = 'block';
+    }
+
     calculateBtn.addEventListener('click', function() {
         if (calculator.getPeriods().length === 0) {
             showError('Adicione pelo menos um período de investimento.');
@@ -139,9 +308,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${formatCurrency(data.accumulatedAmount)}</td>
             `;
         });
-
-        initialCapitalInput.value = '';
         
+        renderCurrentAmountChart(result);
+
         resultSection.scrollIntoView({ behavior: 'smooth' });
     });
     
@@ -150,6 +319,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (savedScenarios.length === 0) {
             comparisonSection.style.display = 'none';
+            comparisonChartContainer.style.display = 'none';
+
+            if (comparisonAmountChart) {
+                comparisonAmountChart.destroy();
+                comparisonAmountChart = null;
+            }
+
             return;
         }
 
@@ -173,6 +349,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${formatCurrency(differenceFromBase)}</td>
             `;
         });
+
+        renderComparisonChart();
     }
 
     saveScenarioBtn.addEventListener('click', function() {
@@ -190,6 +368,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const totalMonths = lastResult.monthlyData.filter(data => data.month > 0).length;
 
+        const scenarioMonthlyData = getMonthlyDataWithMonthZero(
+            lastResult.monthlyData,
+            lastResult.initialCapital
+        ).map(data => ({
+            month: data.month,
+            accumulatedAmount: data.accumulatedAmount
+        }));
+
         savedScenarios.push({
             name: scenarioName.trim(),
             initialCapital: lastResult.initialCapital,
@@ -198,6 +384,7 @@ document.addEventListener('DOMContentLoaded', function() {
             totalInterest: lastResult.totalInterest,
             totalAmount: lastResult.totalAmount,
             profitability: lastResult.profitability
+            monthlyData: scenarioMonthlyData
         });
 
         updateComparisonTable();
@@ -206,13 +393,19 @@ document.addEventListener('DOMContentLoaded', function() {
     clearScenariosBtn.addEventListener('click', function() {
         savedScenarios.length = 0;
         comparisonTable.innerHTML = '';
+        comparisonChartContainer.style.display = 'none';
+
+        if (comparisonAmountChart) {
+            comparisonAmountChart.destroy();
+            comparisonAmountChart = null;
+        }
 
         if (lastResult) {
             comparisonSection.style.display = 'block';
         } else {
             comparisonSection.style.display = 'none';
         }
-});
+    });
 
     clearPeriodsBtn.addEventListener('click', function() {
         calculator.clearPeriods();
@@ -222,13 +415,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
         resultSection.style.display = 'none';
         detailedResultsDiv.style.display = 'none';
+        currentChartSection.style.display = 'none';
+
+        if (currentAmountChart) {
+            currentAmountChart.destroy();
+            currentAmountChart = null;
+        }
 
         lastResult = null;
 
         initialCapitalInput.value = '';
+        initialCapitalInput.disabled = false;
+        initialCapitalLocked = false;
+        calculator.setInitialCapital(0);
+
         document.getElementById('monthly-investment').value = '';
         document.getElementById('interest-rate').value = '';
         document.getElementById('duration').value = '';
+
+        document.getElementById('interest-rate-period').value = 'monthly';
+        document.getElementById('duration-period').value = 'months';
 
         initialCapitalResultElement.textContent = formatCurrency(0);
         totalAmountElement.textContent = formatCurrency(0);

@@ -246,3 +246,23 @@ footer {
     padding-top: 20px;
     border-top: 1px solid #eee;
 }
+
+.chart-section {
+    margin-top: 30px;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.chart-container h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    text-align: center;
+}
