@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialCapitalInput = document.getElementById('initial-capital');
     const addPeriodBtn = document.getElementById('add-period');
     const calculateBtn = document.getElementById('calculate');
-    const resetBtn = document.getElementById('reset');
+    const clearPeriodsBtn = document.getElementById('clear-periods');
     const periodsTable = document.getElementById('periods-table').getElementsByTagName('tbody')[0];
     const resultSection = document.getElementById('result');
     const detailedResultsDiv = document.getElementById('detailed-results');
@@ -183,25 +183,26 @@ document.addEventListener('DOMContentLoaded', function() {
     clearScenariosBtn.addEventListener('click', function() {
         savedScenarios.length = 0;
         comparisonTable.innerHTML = '';
-        comparisonSection.style.display = 'none';
-    });
 
-    resetBtn.addEventListener('click', function() {
+        if (lastResult) {
+            comparisonSection.style.display = 'block';
+        } else {
+            comparisonSection.style.display = 'none';
+        }
+});
+
+    clearPeriodsBtn.addEventListener('click', function() {
         calculator.clearPeriods();
+
         periodsTable.innerHTML = '';
         monthlyTable.innerHTML = '';
+
         resultSection.style.display = 'none';
         detailedResultsDiv.style.display = 'none';
-        
-        savedScenarios.length = 0;
-        comparisonTable.innerHTML = '';
-        comparisonSection.style.display = 'none';
+
         lastResult = null;
 
         initialCapitalInput.value = '';
-        initialCapitalInput.disabled = false;
-        initialCapitalLocked = false;
-        
         document.getElementById('monthly-investment').value = '';
         document.getElementById('interest-rate').value = '';
         document.getElementById('duration').value = '';
@@ -211,5 +212,11 @@ document.addEventListener('DOMContentLoaded', function() {
         totalInvestedElement.textContent = formatCurrency(0);
         totalInterestElement.textContent = formatCurrency(0);
         profitabilityElement.textContent = '0%';
+
+        if (savedScenarios.length > 0) {
+            comparisonSection.style.display = 'block';
+        } else {
+            comparisonSection.style.display = 'none';
+        }
     });
 });
