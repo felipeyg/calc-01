@@ -104,6 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${formatCurrency(data.accumulatedAmount)}</td>
             `;
         });
+
+        initialCapitalInput.value = '';
         
         resultSection.scrollIntoView({ behavior: 'smooth' });
     });
@@ -188,5 +190,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('monthly-investment').value = '';
         document.getElementById('interest-rate').value = '';
         document.getElementById('duration').value = '';
+
+        initialCapitalResultElement.textContent = formatCurrency(0);
+        totalAmountElement.textContent = formatCurrency(0);
+        totalInvestedElement.textContent = formatCurrency(0);
+        totalInterestElement.textContent = formatCurrency(0);
+        profitabilityElement.textContent = '0%';
     });
 });
