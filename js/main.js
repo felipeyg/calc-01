@@ -383,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
             totalInvested: lastResult.totalInvested,
             totalInterest: lastResult.totalInterest,
             totalAmount: lastResult.totalAmount,
-            profitability: lastResult.profitability
+            profitability: lastResult.profitability,
             monthlyData: scenarioMonthlyData
         });
 
