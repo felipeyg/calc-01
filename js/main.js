@@ -20,12 +20,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const savedScenarios = [];
     let lastResult = null;
+    let initialCapitalLocked = false;
     
     addPeriodBtn.addEventListener('click', function() {
         const monthlyInvestment = parseBrazilianNumber(document.getElementById('monthly-investment').value);
         const interestRate = parseBrazilianNumber(document.getElementById('interest-rate').value);
         const durationValue = document.getElementById('duration').value;
         const duration = Number(durationValue);
+
+        if (!initialCapitalLocked) {
+            const initialCapitalValue = initialCapitalInput.value.trim();
+            const initialCapital = initialCapitalValue === '' ? 0 : parseBrazilianNumber(initialCapitalValue);
+
+            if (!isValidNonNegativeNumber(initialCapital)) {
+                showError('O capital inicial deve ser maior ou igual a zero.');
+                return;
+            }
+
+            calculator.setInitialCapital(initialCapital);
+            initialCapitalInput.disabled = true;
+            initialCapitalLocked = true;
+        }
         
         if (
             !isValidNonNegativeNumber(monthlyInvestment) ||
@@ -51,6 +66,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const rowIndex = row.rowIndex - 1;
             if (calculator.removePeriod(rowIndex)) {
                 periodsTable.deleteRow(rowIndex);
+
+                if (calculator.getPeriods().length === 0) {
+                    initialCapitalInput.disabled = false;
+                    initialCapitalLocked = false;
+                    calculator.setInitialCapital(0);
+                }
             }
         });
         
@@ -60,20 +81,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     calculateBtn.addEventListener('click', function() {
-        const initialCapitalValue = initialCapitalInput.value.trim();
-        const initialCapital = initialCapitalValue === '' ? 0 : parseBrazilianNumber(initialCapitalValue);
-        
-        if (!isValidNonNegativeNumber(initialCapital)) {
-            showError('O capital inicial deve ser maior ou igual a zero.');
-            return;
-        }
-        
         if (calculator.getPeriods().length === 0) {
             showError('Adicione pelo menos um período de investimento.');
             return;
         }
         
-        calculator.setInitialCapital(initialCapital);
         const result = calculator.calculate();
 
         lastResult = result;
@@ -187,6 +199,9 @@ document.addEventListener('DOMContentLoaded', function() {
         lastResult = null;
 
         initialCapitalInput.value = '';
+        initialCapitalInput.disabled = false;
+        initialCapitalLocked = false;
+        
         document.getElementById('monthly-investment').value = '';
         document.getElementById('interest-rate').value = '';
         document.getElementById('duration').value = '';
