@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentAmountChartCanvas = document.getElementById('current-amount-chart');
     const comparisonChartContainer = document.getElementById('comparison-chart-container');
     const comparisonChartCanvas = document.getElementById('comparison-chart');
+    const exportCsvBtn = document.getElementById('export-csv');
 
     let currentAmountChart = null;
     let comparisonAmountChart = null;
@@ -119,6 +120,10 @@ document.addEventListener('DOMContentLoaded', function() {
     return [
         {
             month: 0,
+            monthlyInvestment: 0,
+            monthlyInterest: 0,
+            totalInvested: initialCapital,
+            totalInterest: 0,
             accumulatedAmount: initialCapital
         },
         ...monthlyData
@@ -359,12 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const scenarioName = prompt('Informe um nome para o cenário:');
-
-        if (!scenarioName || scenarioName.trim() === '') {
-            showError('Informe um nome válido para o cenário.');
-            return;
-        }
+        const scenarioName = `Cenário ${savedScenarios.length + 1}`;
 
         const totalMonths = lastResult.monthlyData.filter(data => data.month > 0).length;
 
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }));
 
         savedScenarios.push({
-            name: scenarioName.trim(),
+            name: scenarioName,
             initialCapital: lastResult.initialCapital,
             totalMonths: totalMonths,
             totalInvested: lastResult.totalInvested,
@@ -447,5 +447,53 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             comparisonSection.style.display = 'none';
         }
+    });
+
+
+    function formatNumberForCSV(value) {
+        return Number(value).toFixed(2).replace('.', ',');
+    }
+
+    function exportMonthlyDataToCSV() {
+        if (!lastResult || !lastResult.monthlyData || lastResult.monthlyData.length === 0) {
+            showError('Execute uma simulação antes de exportar os resultados.');
+            return;
+        }
+
+        let csvContent = '\uFEFF';
+        
+        csvContent += 'Mês;Aporte;Juros no Mês;Total Investido;Total em Juros;Montante\n';
+
+        lastResult.monthlyData.forEach(data => {
+            csvContent += [
+                data.month,
+                formatNumberForCSV(data.monthlyInvestment),
+                formatNumberForCSV(data.monthlyInterest),
+                formatNumberForCSV(data.totalInvested),
+                formatNumberForCSV(data.totalInterest),
+                formatNumberForCSV(data.accumulatedAmount)
+            ].join(';') + '\n';
+        });
+
+        const blob = new Blob([csvContent], {
+            type: 'text/csv;charset=utf-8;'
+        });
+
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'resultado_simulacao.csv');
+        link.style.display = 'none';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+    }
+
+        exportCsvBtn.addEventListener('click', function() {
+        exportMonthlyDataToCSV();
     });
 });
